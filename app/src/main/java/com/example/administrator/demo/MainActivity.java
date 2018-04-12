@@ -19,6 +19,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.idescout.sql.SqlScoutServer;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Intent intent;
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SqlScoutServer.create(this,getPackageName());
         initView();
         setLisener();
         initData();
@@ -49,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void putDataToContent() {
         ContentValues contentValues = new ContentValues();
         contentValues.put("bookname","爱因斯坦相对论");
-        contentValues.put("booknum",100);
+        contentValues.put("booknum",2330);
         getContentResolver().insert(MyContentProvider.BOOK_URI,contentValues);
     }
 
