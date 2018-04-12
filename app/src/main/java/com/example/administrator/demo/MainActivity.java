@@ -2,8 +2,11 @@ package com.example.administrator.demo;
 
 import android.app.Service;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -37,10 +40,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initView();
         setLisener();
         initData();
+        putDataToContent();
+
 
 
     }
 
+    private void putDataToContent() {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("bookname","爱因斯坦相对论");
+        contentValues.put("booknum",100);
+        getContentResolver().insert(MyContentProvider.BOOK_URI,contentValues);
+    }
 
 
     private void initView() {
@@ -125,7 +136,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 unbindService(serviceConnection);
                 break;
             case R.id.getdata:
-                show.setText(String.valueOf(myservice.getAge()));
+                Cursor cursor = getContentResolver().query(MyContentProvider.BOOK_URI, null, null, null, null);
+                cursor.moveToFirst();
+
+                show.setText(cursor.getString(2));
+
+                cursor.close();
+//                show.setText(String.valueOf(myservice.getAge()));
                 break;
             case R.id.senddata:
                 Message msg = Message.obtain();
